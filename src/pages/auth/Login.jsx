@@ -25,7 +25,7 @@ const TitleContainer = styled.div`
   justify-content: start;
   align-items: start;
   height: 100%;
-  margin: 15% 0 3% 0;
+  margin: 10% 0 3% 0;
 `;
 
 const StyledLink = styled(Link)`
@@ -53,11 +53,28 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  // 임시 아이디 : test1, 비밀번호: test1234
+
+  // 로그인 로직(임시)
+  const getLogin = (id, password) => {
+    if (id === 'test1' && password === 'test1234') {
+      return true;
+    } else return false;
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
     if (id !== '' && password !== '') {
       // 로그인 api 호출
       setError('');
+
+      if (getLogin(id, password)) {
+        // 로그인 성공 -> 메인 페이지로 이동
+        setId('');
+        setPassword('');
+      } else {
+        setError('아이디나 비밀번호를 확인해주세요.');
+      }
     } else if (id === '') {
       setError('아이디를 입력해주세요.');
     } else if (password === '') {
