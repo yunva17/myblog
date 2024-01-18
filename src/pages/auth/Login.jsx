@@ -108,7 +108,7 @@ const Login = () => {
         <Button
           as='input'
           type='submit'
-          value='회원가입'
+          value='로그인'
           style={{ width: '100%' }}
         />
       </LoginContainer>
