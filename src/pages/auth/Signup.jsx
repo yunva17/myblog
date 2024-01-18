@@ -26,39 +26,21 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
     watch,
+    reset,
   } = useForm();
-
-  const [idCheck, setIdCheck] = useState(false);
-  const [nicknameCheck, setNicknameCheck] = useState(false);
-
-  // blur
-  const [idblur, setIdBlur] = useState(true);
-  const [nicknameblur, setNicknameBlur] = useState(true);
 
   // 아이디, 비밀번호, 닉네임
   const { id, password, nickname } = watch();
 
-  // 중복확인 오류 메세지
-  const [idError, setIdError] = useState('');
-  const [nickError, setNickError] = useState('');
+  // 비밀번호 유효성
+  const passwordRegex =
+    /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
 
   // 회원가입 전송
   const onSubmit = () => {
     // 회원가입 api 호출
-  };
 
-  // 아이디 중복확인
-  const onCheckId = () => {
-    if (id !== '') {
-      // 아이디 중복확인 api 호출
-    }
-  };
-
-  // 닉네임 중복확인
-  const onCheckNickname = () => {
-    if (nickname !== '') {
-      // 닉네임 중복확인 api 호출
-    }
+    reset();
   };
 
   return (
@@ -73,37 +55,32 @@ const Signup = () => {
             placeholder='아이디'
             {...register('id', {
               required: true,
-              validate: () => idCheck === true,
-              onBlur: () => {
-                onCheckId();
-                setIdBlur(true);
-              },
             })}
-            onFocus={() => {
-              setIdBlur(false);
-              setIdError('');
-            }}
           />
         </Form.Group>
         {errors.id?.type === 'required' && (
           <ErrorMessage>아이디를 입력해주세요.</ErrorMessage>
         )}
-        {errors.id?.type === 'validate' && idblur && (
-          <ErrorMessage>{idError}</ErrorMessage>
-        )}
-        {!errors.id && idblur && id !== '' && id !== undefined && !idCheck && (
-          <ErrorMessage>{idError}</ErrorMessage>
-        )}
+
         <Form.Group>
           <Form.Label>비밀번호</Form.Label>
           <Form.Control
-            placeholder='비밀번호'
+            placeholder='영문, 숫자, 특수문자 포함 8~20자'
             type='password'
-            {...register('password', { required: true })}
+            {...register('password', {
+              required: true,
+              pattern: {
+                value: passwordRegex,
+                message: '영문, 숫자, 특수문자 포함 8~20자로 입력해주세요',
+              },
+            })}
           />
         </Form.Group>
         {errors.password?.type === 'required' && (
           <ErrorMessage>비밀번호를 입력해주세요.</ErrorMessage>
+        )}
+        {errors.password?.type === 'pattern' && (
+          <ErrorMessage>{errors?.password?.message}</ErrorMessage>
         )}
         <Form.Group>
           <Form.Label>비밀번호 확인</Form.Label>
@@ -129,29 +106,13 @@ const Signup = () => {
             placeholder='닉네임'
             {...register('nickname', {
               required: true,
-              validate: () => nicknameCheck === true,
-              onBlur: () => {
-                onCheckNickname();
-                setNicknameBlur(true);
-              },
             })}
-            onFocus={() => {
-              setNicknameBlur(false);
-              setNickError('');
-            }}
           />
         </Form.Group>
         {errors.nickname?.type === 'required' && (
           <ErrorMessage>닉네임을 입력해주세요.</ErrorMessage>
         )}
-        {errors.nickname?.type === 'validate' && nicknameblur && (
-          <ErrorMessage>{nickError}</ErrorMessage>
-        )}
-        {!errors.nickname &&
-          !nicknameCheck &&
-          nicknameblur &&
-          nickname !== undefined &&
-          nickname !== '' && <ErrorMessage>{nickError}</ErrorMessage>}
+
         <br />
         <Button
           as='input'
