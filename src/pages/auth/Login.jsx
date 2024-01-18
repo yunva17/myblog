@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -49,6 +49,8 @@ const ErrorMessage = styled.p`
 `;
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -72,6 +74,8 @@ const Login = () => {
         // 로그인 성공 -> 메인 페이지로 이동
         setId('');
         setPassword('');
+
+        navigate('/');
       } else {
         setError('아이디나 비밀번호를 확인해주세요.');
       }
