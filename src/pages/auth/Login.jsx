@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const Container = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ const Login = () => {
   const [error, setError] = useState('');
 
   // 임시 아이디 : test1, 비밀번호: test1234
+  const { setUserId, setIsLogin } = useContext(AuthContext);
 
   // 로그인 로직(임시)
   const getLogin = (id, password) => {
@@ -72,9 +74,13 @@ const Login = () => {
 
       if (getLogin(id, password)) {
         // 로그인 성공 -> 메인 페이지로 이동
+
+        localStorage.setItem('userId', id);
+        setIsLogin(true);
+        setUserId(id);
+
         setId('');
         setPassword('');
-
         navigate('/');
       } else {
         setError('아이디나 비밀번호를 확인해주세요.');
